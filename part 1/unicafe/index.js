@@ -17,16 +17,24 @@ const Element = ({name, number}) => (
   <p>{name} {number}</p>
 )
 
-const Statistics = ({goodPart, neutralPart, badPart}) => (
-  <div>
-    <p>{goodPart.name} {goodPart.number}</p>
-    <p>{neutralPart.name} {neutralPart.number}</p>
-    <p>{badPart.name} {badPart.number}</p>
-    <p>all {goodPart.number + neutralPart.number + badPart.number} </p>
-    <p>average {(goodPart.number - badPart.number) / (goodPart.number + neutralPart.number + badPart.number)} </p>
-    <p>positive {(goodPart.number) / (goodPart.number + neutralPart.number + badPart.number) * 100} % </p>
-  </div>
-)
+const Statistics = ({goodPart, neutralPart, badPart}) => {
+  if (goodPart.number + neutralPart.number + badPart.number != 0) {
+    return (
+    <div>
+      <p>{goodPart.name} {goodPart.number}</p>
+      <p>{neutralPart.name} {neutralPart.number}</p>
+      <p>{badPart.name} {badPart.number}</p>
+      <p>all {goodPart.number + neutralPart.number + badPart.number} </p>
+      <p>average {(goodPart.number - badPart.number) / (goodPart.number + neutralPart.number + badPart.number)} </p>
+      <p>positive {(goodPart.number) / (goodPart.number + neutralPart.number + badPart.number) * 100} % </p>
+    </div>
+    )
+  } else {
+    return (
+      <p>No feedback given</p>
+    )
+  }
+}
 
 const App = () => {
   // save clicks of each button to own state
