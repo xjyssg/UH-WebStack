@@ -13,28 +13,10 @@ const Button = ({handler, text}) => (
   </button>
 )
 
-const Element = ({name, number}) => (
+const Statistic = ({name, number}) => (
   <p>{name} {number}</p>
 )
 
-const Statistics = ({goodPart, neutralPart, badPart}) => {
-  if (goodPart.number + neutralPart.number + badPart.number != 0) {
-    return (
-    <div>
-      <p>{goodPart.name} {goodPart.number}</p>
-      <p>{neutralPart.name} {neutralPart.number}</p>
-      <p>{badPart.name} {badPart.number}</p>
-      <p>all {goodPart.number + neutralPart.number + badPart.number} </p>
-      <p>average {(goodPart.number - badPart.number) / (goodPart.number + neutralPart.number + badPart.number)} </p>
-      <p>positive {(goodPart.number) / (goodPart.number + neutralPart.number + badPart.number) * 100} % </p>
-    </div>
-    )
-  } else {
-    return (
-      <p>No feedback given</p>
-    )
-  }
-}
 
 const App = () => {
   // save clicks of each button to own state
@@ -42,18 +24,6 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  const goodPart = {
-    name: "good",
-    number: good
-  }
-  const neutralPart = {
-    name: "neutral",
-    number: neutral
-  }
-  const badPart = {
-    name: "bad",
-    number: bad
-  }
 
   return (
     <div>
@@ -62,7 +32,12 @@ const App = () => {
       <Button handler={() => setNeutral(neutral+1)} text="neutral" />
       <Button handler={() => setBad(bad+1)} text="bad" />
       <Title text="statistics" />
-      <Statistics goodPart={goodPart} neutralPart={neutralPart} badPart={badPart} />
+      <Statistic name="good" number={good} />
+      <Statistic name="neutral" number={neutral} />
+      <Statistic name="bad" number={bad} />
+      <Statistic name="all" number={good + neutral + bad} />
+      <Statistic name="average" number={(good - bad) / (good + neutral + bad)} />
+      <Statistic name="positive" number={((good) / (good + neutral + bad) * 100) + "%"} />
     </div>
   )
 }
