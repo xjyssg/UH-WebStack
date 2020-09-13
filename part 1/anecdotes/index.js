@@ -14,6 +14,7 @@ const App = (props) => {
   const [votes, setVotes] = useState(
     Array.apply(null, new Array(props.anecdotes.length)).map(Number.prototype.valueOf,0)
   )
+  const [maxIdx, setMaxIdx] = useState(0)
 
   const randomSelect = () => {
     setSelected(parseInt(Math.random() * props.anecdotes.length))
@@ -23,14 +24,20 @@ const App = (props) => {
     const copy = [...votes]
     copy[selected] += 1
     setVotes(copy)
+    const localMaxIdx = copy.indexOf(Math.max(...copy))
+    setMaxIdx(localMaxIdx)
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{props.anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <Button handler={updateVotes} text="vote" />
       <Button handler={randomSelect} text="next anecdote" />
+      <h1>Anecdote with most votes</h1>
+      <p>{props.anecdotes[maxIdx]}</p>
+      <p>has {votes[maxIdx]} votes</p>
     </div>
   )
 }
