@@ -14,7 +14,18 @@ const Button = ({handler, text}) => (
 )
 
 const Element = ({name, number}) => (
-<p>{name} {number}</p>
+  <p>{name} {number}</p>
+)
+
+const Statistics = ({goodPart, neutralPart, badPart}) => (
+  <div>
+    <p>{goodPart.name} {goodPart.number}</p>
+    <p>{neutralPart.name} {neutralPart.number}</p>
+    <p>{badPart.name} {badPart.number}</p>
+    <p>all {goodPart.number + neutralPart.number + badPart.number} </p>
+    <p>average {(goodPart.number - badPart.number) / (goodPart.number + neutralPart.number + badPart.number)} </p>
+    <p>positive {(goodPart.number) / (goodPart.number + neutralPart.number + badPart.number) * 100} % </p>
+  </div>
 )
 
 const App = () => {
@@ -23,6 +34,19 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  const goodPart = {
+    name: "good",
+    number: good
+  }
+  const neutralPart = {
+    name: "neutral",
+    number: neutral
+  }
+  const badPart = {
+    name: "bad",
+    number: bad
+  }
+
   return (
     <div>
       <Title text="give feedback" />
@@ -30,12 +54,7 @@ const App = () => {
       <Button handler={() => setNeutral(neutral+1)} text="neutral" />
       <Button handler={() => setBad(bad+1)} text="bad" />
       <Title text="statistics" />
-      <Element name="good" number={good} />
-      <Element name="neutral" number={neutral} />
-      <Element name="bad" number={bad} />
-      <Element name="all" number={good + neutral + bad} />
-      <Element name="average" number={(good - bad) / (good + neutral + bad)} />
-      <Element name="positive" number={(good / (good + neutral + bad) * 100) + "%"} />
+      <Statistics goodPart={goodPart} neutralPart={neutralPart} badPart={badPart} />
     </div>
   )
 }
