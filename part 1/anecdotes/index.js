@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 
+
 const Button = ({handler, text}) => (
   <button onClick={handler}>
     {text}
@@ -10,14 +11,25 @@ const Button = ({handler, text}) => (
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(
+    Array.apply(null, new Array(props.anecdotes.length)).map(Number.prototype.valueOf,0)
+  )
 
   const randomSelect = () => {
     setSelected(parseInt(Math.random() * props.anecdotes.length))
   }
 
+  const updateVotes = () => {
+    const copy = [...votes]
+    copy[selected] += 1
+    setVotes(copy)
+  }
+
   return (
     <div>
       <p>{props.anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
+      <Button handler={updateVotes} text="vote" />
       <Button handler={randomSelect} text="next anecdote" />
     </div>
   )
