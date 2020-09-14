@@ -1,18 +1,23 @@
 import React, { useState } from 'react'
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas' }
+  const [ records, setPersons ] = useState([
+    {
+      name: 'Arto Hellas',
+      number: '040-1234567'
+    }
   ]) 
   const [ newName, setNewName ] = useState('')
+  
+  const [ newNumber, setNewNumber ] = useState('')
 
-  const addName = (event) => {
+  const addRecord = (event) => {
     event.preventDefault()
 
     var createFlag = true
 
-    persons.forEach(function(person, index, array) {
-      if (person.name === newName) {
+    records.forEach(function(record, index, array) {
+      if (record.name === newName) {
         window.alert(`${newName} is already added to phonebook`)
         createFlag = false
       }
@@ -20,23 +25,32 @@ const App = () => {
 
     if (createFlag) {
       const newObject = {
-        name: newName
+        name: newName,
+        number: newNumber
       }
-      setPersons(persons.concat(newObject))
+      setPersons(records.concat(newObject))
     }
     setNewName('')
+    setNewNumber('')
   }
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
 
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
+      <form onSubmit={addRecord}>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleNumberChange} />
         </div>
         <div>
           <button type="submit">add</button>
@@ -44,7 +58,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map(person => <li key={person.name}>{person.name}</li>)}
+        {records.map(record => <li key={record.name}>{record.name} {record.number}</li>)}
       </ul>
     </div>
   )
