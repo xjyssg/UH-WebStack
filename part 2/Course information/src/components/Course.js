@@ -2,7 +2,7 @@ import React from 'react'
 
 
 const Header = ({text}) => (
-  <h1>{text}</h1>
+  <h2>{text}</h2>
 )
 
 const Part = ({text, number}) => (
@@ -12,7 +12,7 @@ const Part = ({text, number}) => (
 const Total = ({parts}) => {
   const numberList = parts.map(part => part.exercises)
   return (
-    <h4>total of {numberList.reduce((x, y) => x+y)} exercises</h4>
+    <h3>total of {numberList.reduce((x, y) => x+y)} exercises</h3>
   )
 }
 
