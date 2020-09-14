@@ -8,10 +8,22 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    const newObject = {
-      name: newName
+
+    var createFlag = true
+
+    persons.forEach(function(person, index, array) {
+      if (person.name === newName) {
+        window.alert(`${newName} is already added to phonebook`)
+        createFlag = false
+      }
+    })
+
+    if (createFlag) {
+      const newObject = {
+        name: newName
+      }
+      setPersons(persons.concat(newObject))
     }
-    setPersons(persons.concat(newObject))
     setNewName('')
   }
 
