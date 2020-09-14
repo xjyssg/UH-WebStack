@@ -9,11 +9,19 @@ const Part = ({text, number}) => (
   <p>{text} {number}</p>
 )
 
+const Total = ({parts}) => {
+  const numberList = parts.map(part => part.exercises)
+  return (
+    <h4>total of {numberList.reduce((x, y) => x+y)} exercises</h4>
+  )
+}
+
 const Content = ({parts}) => {
     
   return (
     <div>
       {parts.map(part => <Part key={part.id} text={part.name} number={part.exercises} />)}
+      <Total parts={parts} />
     </div>
   )
 }
