@@ -1,15 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import Filter from './components/Filter'
 import RecordForm from './components/RecordForm'
 import Records from './components/Records'
 
 const App = () => {
-  const [ records, setPersons ] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [ records, setRecords ] = useState([])
 
   const [ newName, setNewName ] = useState('')
   
@@ -18,6 +14,14 @@ const App = () => {
   const [ newFilter, setNewFilter ] = useState('')
 
   const [showAll, setShowAll] = useState(true)
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setRecords(response.data)
+      })
+  }, [])
 
   const addRecord = (event) => {
     event.preventDefault()
@@ -36,7 +40,7 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      setPersons(records.concat(newObject))
+      setRecords(records.concat(newObject))
     }
     setNewName('')
     setNewNumber('')
@@ -61,6 +65,8 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
+
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -69,9 +75,6 @@ const App = () => {
       <RecordForm addRecord={addRecord} nameValue={newName} nameHandler={handleNameChange} numberValue={newNumber} numberHandler={handleNumberChange} />
       <h3>Numbers</h3>
       <Records recordsToShow={recordsToShow} />
-      {/* <ul>
-        {recordsToShow.map(record => <li key={record.name}>{record.name} {record.number}</li>)}
-      </ul> */}
     </div>
   )
 }
