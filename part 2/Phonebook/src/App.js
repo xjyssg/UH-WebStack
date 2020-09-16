@@ -31,7 +31,15 @@ const App = () => {
 
     records.forEach(function(record, index, array) {
       if (record.name === newName) {
-        window.alert(`${newName} is already added to phonebook`)
+        if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+          const oldObject = records.find(record => record.name === newName)
+          const newObject = {...oldObject, number: newNumber}
+          webService
+            .update(oldObject.id, newObject)
+            .then(response => {
+              setRecords(records.map(record => record.name === newName ? response : record))
+            })
+        }
         createFlag = false
       }
     })
