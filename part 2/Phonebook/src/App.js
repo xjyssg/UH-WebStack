@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import RecordForm from './components/RecordForm'
 import Records from './components/Records'
+import webService from './services/web'
 
 const App = () => {
   const [ records, setRecords ] = useState([])
@@ -16,10 +17,10 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setRecords(response.data)
+    webService
+      .getAll()
+      .then(initialRecords => {
+        setRecords(initialRecords)
       })
   }, [])
 
@@ -40,7 +41,11 @@ const App = () => {
         name: newName,
         number: newNumber
       }
-      setRecords(records.concat(newObject))
+      webService
+        .create(newObject)
+        .then(newRecord =>{
+          setRecords(records.concat(newRecord))
+        })
     }
     setNewName('')
     setNewNumber('')
