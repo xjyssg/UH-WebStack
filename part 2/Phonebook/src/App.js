@@ -18,6 +18,7 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   const [message, setMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     webService
@@ -35,20 +36,36 @@ const App = () => {
 
     records.forEach(function(record, index, array) {
       if (record.name === newName) {
+        createFlag = false
         if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+          updateFlag = true
+          createFlag = false
           const oldObject = records.find(record => record.name === newName)
           const newObject = {...oldObject, number: newNumber}
           webService
             .update(oldObject.id, newObject)
             .then(response => {
               setRecords(records.map(record => record.name === newName ? response : record))
+              setMessage(
+                `Added ${newName}`
+              )
+              setTimeout(() => {
+                setMessage(null)
+              }, 5000)
             })
-          updateFlag = true
+            .catch(error => {
+              setRecords(records.filter(record => record.name !== newName))
+              setErrorMessage(
+                `Information of ${newName} has already been removed from server`
+              )
+              setTimeout(() => {
+                setErrorMessage(null)
+              }, 5000)
+            })
+          
         }
-        createFlag = false
       }
     })
-
     if (createFlag) {
       const newObject = {
         name: newName,
@@ -58,17 +75,15 @@ const App = () => {
         .create(newObject)
         .then(newRecord =>{
           setRecords(records.concat(newRecord))
+          setMessage(
+            `Added ${newName}`
+          )
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
     }
 
-    if (createFlag || updateFlag) {
-      setMessage(
-        `Added ${newName}`
-      )
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-    }
 
     setNewName('')
     setNewNumber('')
@@ -105,8 +120,9 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={message} />
       <h2>Phonebook</h2>
+      <Notification message={message} color='green' />
+      <Notification message={errorMessage} color='red' />
       <Filter value={newFilter} handler={handleFilterChange} />
       <h3>add a new</h3>
       <RecordForm addRecord={addRecord} nameValue={newName} nameHandler={handleNameChange} numberValue={newNumber} numberHandler={handleNumberChange} />
