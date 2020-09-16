@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Filter from './components/Filter'
 import RecordForm from './components/RecordForm'
+import Notification from './components/Notification'
 import Record from './components/Record'
 import webService from './services/web'
 
@@ -16,6 +17,8 @@ const App = () => {
 
   const [showAll, setShowAll] = useState(true)
 
+  const [message, setMessage] = useState('')
+
   useEffect(() => {
     webService
       .getAll()
@@ -28,6 +31,7 @@ const App = () => {
     event.preventDefault()
 
     var createFlag = true
+    var updateFlag = false
 
     records.forEach(function(record, index, array) {
       if (record.name === newName) {
@@ -39,6 +43,7 @@ const App = () => {
             .then(response => {
               setRecords(records.map(record => record.name === newName ? response : record))
             })
+          updateFlag = true
         }
         createFlag = false
       }
@@ -55,6 +60,16 @@ const App = () => {
           setRecords(records.concat(newRecord))
         })
     }
+
+    if (createFlag || updateFlag) {
+      setMessage(
+        `Added ${newName}`
+      )
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
+
     setNewName('')
     setNewNumber('')
   }
@@ -90,6 +105,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} />
       <h2>Phonebook</h2>
       <Filter value={newFilter} handler={handleFilterChange} />
       <h3>add a new</h3>
