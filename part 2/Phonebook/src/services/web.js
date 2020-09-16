@@ -9,4 +9,8 @@ const create = newObject => {
     return axios.post(baseUrl, newObject).then(response => response.data)
 }
 
-export default {getAll, create}
+const deleteRecord = id => {
+    return axios.delete(`${baseUrl}/${id}`).then(response => console.log("delete!!", response))
+}
+
+export default {getAll, create, deleteRecord}

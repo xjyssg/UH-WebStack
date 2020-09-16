@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Filter from './components/Filter'
 import RecordForm from './components/RecordForm'
-import Records from './components/Records'
+import Record from './components/Record'
 import webService from './services/web'
 
 const App = () => {
@@ -70,6 +70,14 @@ const App = () => {
     setNewFilter(event.target.value)
   }
 
+  const deleteHandler = person => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      webService
+        .deleteRecord(person.id)
+      console.log("alertttttt")
+      setRecords(records.filter(record => record.id !== person.id))
+    }
+  }
 
 
   return (
@@ -79,7 +87,9 @@ const App = () => {
       <h3>add a new</h3>
       <RecordForm addRecord={addRecord} nameValue={newName} nameHandler={handleNameChange} numberValue={newNumber} numberHandler={handleNumberChange} />
       <h3>Numbers</h3>
-      <Records recordsToShow={recordsToShow} />
+      <div>
+        {recordsToShow.map((record, idx) => <Record key={idx} record={record} deleteHandler={() => deleteHandler(record)} />)}
+      </div>
     </div>
   )
 }
